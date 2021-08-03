@@ -4,15 +4,14 @@
   "description": "Static website to analyse the profitability of your uniswap V3 strategy.(minimum viable product)",
   "main": "index.js",
   "scripts": {
-    "start": "yarn run start:prod",
+    "heroku-prebuild": "npm install -g serve",
+    "start": "serve -s build",
     "start:dev": "yarn run frontend:dev",
-    "start:prod": "pm2-runtime start ecosystem.config.js --env production",
     "build": "yarn run frontend:build",
     "frontend:dev": "craco start",
     "frontend:build": "craco build",
     "build:remove": "del dist && del build",
     "log:remove": "del log",
-    "serve": "npm run start:prod",
     "test": "npm run test:eslint",
     "test:eslint": "eslint src/",
     "test:eslint-fix": "eslint src/ --fix"
@@ -32,6 +31,8 @@
   "author": "Nolan Vanmoortel",
   "license": "ISC",
   "dependencies": {
+  },
+  "devDependencies": {
     "@ant-design/icons": "^4.6.2",
     "@babel/eslint-parser": "^7.14.9",
     "@craco/craco": "^6.1.2",
@@ -48,7 +49,8 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "moment": "^2.24.0",
-    "pm2": "^5.1.0",
+    "cross-env": "^6.0.3",
+    "del-cli": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -58,10 +60,6 @@
     "recharts": "^2.0.10",
     "redux": "^4.1.0",
     "redux-saga": "^1.1.3"
-  },
-  "devDependencies": {
-    "cross-env": "^6.0.3",
-    "del-cli": "^3.0.0"
   },
   "private": true
 }
