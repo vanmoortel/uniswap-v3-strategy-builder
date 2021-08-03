@@ -6,7 +6,7 @@
   "scripts": {
     "start": "yarn run start:prod",
     "start:dev": "yarn run frontend:dev",
-    "start:prod": "pm2 start ecosystem.config.js --env production",
+    "start:prod": "pm2-runtime start ecosystem.config.js --env production",
     "build": "yarn run frontend:build",
     "frontend:dev": "craco start",
     "frontend:build": "craco build",
@@ -48,6 +48,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "moment": "^2.24.0",
+    "pm2": "^5.1.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
