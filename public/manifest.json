@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "amm.builders",
+  "name": "Uniswap V3 Strategy Builder",
   "icons": [
     {
       "src": "favicon.ico",
