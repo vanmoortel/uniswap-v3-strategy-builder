@@ -4,7 +4,7 @@
   "description": "Static website to analyse the profitability of your uniswap V3 strategy.(minimum viable product)",
   "main": "index.js",
   "scripts": {
-    "start": "yarn run start:dev",
+    "start": "yarn run start:prod",
     "start:dev": "yarn run frontend:dev",
     "start:prod": "pm2 start ecosystem.config.js --env production",
     "build": "yarn run frontend:build",
