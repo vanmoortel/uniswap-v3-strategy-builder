@@ -1,0 +1,90 @@
+//
+// Name:           Media Queries Library (Less)
+// Description:    Really simple media queries in Less.
+// Version:        3.0.0
+//
+// Author:         Denis Malinochkin
+// Git:            https://github.com/mrmlnc/less-mq
+//
+// twitter:        @mrmlnc
+//
+// ------------------------------------
+
+
+// Width Screen
+// ------------------------------------
+.min(@min, @ruleset) {
+  @media (min-width: @min) {
+    @ruleset();
+  }
+}
+
+.max(@max, @ruleset) {
+  @media (max-width: (@max - 1)) {
+    @ruleset();
+  }
+}
+
+.screen(@min, @max, @ruleset) {
+  @media (min-width: @min) and (max-width: (@max - 1)) {
+    @ruleset();
+  }
+}
+
+
+// Height
+// ------------------------------------
+.min-height(@min, @ruleset) {
+  @media (min-height: @min) {
+    @ruleset();
+  }
+}
+
+.max-height(@max, @ruleset) {
+  @media (max-height: (@max - 1)) {
+    @ruleset();
+  }
+}
+
+.screen-height(@min, @max, @ruleset) {
+  @media (min-height: @min) and (max-height: (@max - 1)) {
+    @ruleset();
+  }
+}
+
+
+// Orientation
+// ------------------------------------
+.landscape(@ruleset) {
+  @media (orientation: landscape) {
+    @ruleset();
+  }
+}
+
+.portrait(@ruleset) {
+  @media (orientation: portrait) {
+    @ruleset();
+  }
+}
+
+// Default BreakPoints
+// -----------------------------------
+.xs(@ruleset) {
+  .max(576px, @ruleset);
+}
+
+.sm(@ruleset) {
+  .max(768px, @ruleset);
+}
+
+.lg(@ruleset) {
+  .max(992px, @ruleset);
+}
+
+.xl(@ruleset) {
+  .max(1200px, @ruleset);
+}
+
+.xxl(@ruleset) {
+  .max(1600px, @ruleset);
+}

@@ -1,0 +1,90 @@
+@font-face {
+  font-family: 'Oswald', sans-serif;
+  src: local("Oswald"),
+  url("../../assets/Oswald-VariableFont_wght.ttf") format("truetype");
+  font-weight: normal;
+}
+
+.ant-popover,.button-translation, .button-language{
+  font-family: 'Oswald', sans-serif;
+}
+
+.button-translation{
+  float: right;
+  background-color: #676eff;
+  &:hover, &:active, &:focus{
+    background-color: #757afd;
+  }
+}
+
+.button-language{
+  &:hover{
+    background-color: transparent;
+  }
+}
+
+.ant-popover-inner{
+  background-color: #23232f !important;
+}
+.ant-popover-title{
+  border: 0;
+  text-align: center;
+}
+
+.card-add-range {
+  max-height: 860px;
+  overflow-y: scroll;
+  .ant-card-body{
+    height: 100% !important;
+  }
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-graph-header {
+  min-height: 80px;
+}
+
+.card-graph {
+  height: 764px;
+  .ant-card-body {
+    height: 100%;
+  }
+}
+
+.card-position-list {
+}
+
+.pr-22 {
+  padding-right: 22px !important;
+}
+
+.pl-22 {
+  padding-left: 22px !important;
+}
+
+.ant-card {
+  background: #2e2e3d !important;
+  border-color: transparent !important;
+}
+.ant-input-number, .ant-picker {
+  width: 160px;
+}
+.ant-cascader-picker {
+  width: 200px !important;
+}
+.card-add-range-no-position{
+  .ant-card-body{
+    height: fit-content !important;
+  }
+}
+
+.popover-translation{
+  position: fixed;
+  z-index: 99;
+  right: 16px;
+  top: 8px;
+}
