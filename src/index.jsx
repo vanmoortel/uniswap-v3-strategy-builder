@@ -2,17 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.dark.less';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Spin } from 'antd';
 import configureStore from './redux';
 import App from './features/App';
 import './index.less';
 
-const store = configureStore();
+const { store, persistor } = configureStore();
 
 const render = (Component) => {
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
-        <Component />
+        <PersistGate loading={<Spin />} persistor={persistor}>
+          <Component />
+        </PersistGate>
       </Provider>
     </React.StrictMode>,
     document.getElementById('root'),
