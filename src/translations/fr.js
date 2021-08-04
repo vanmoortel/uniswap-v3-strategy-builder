@@ -4,7 +4,7 @@ export default {
   Range: 'Range',
   Liquidity: 'Liquidité',
   Configuration: 'Configuration',
-  'Automatically sets the daily trading volume and liquidity within 1% of the last price': 'Fixe automatiquement le volume d\'échange quotidien et la liquidité dans une fourchette de 1% autour dernier prix',
+  'Automatically sets the daily trading volume and liquidity within 1% of the last price': 'Fixe automatiquement le volume d\'échange quotidien et la liquidité dans une fourchette de 1% autour du dernier prix',
   Optimist: 'Optimiste',
   Median: 'Médianne',
   Pessimist: 'Pessimiste',
