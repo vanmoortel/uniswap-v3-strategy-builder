@@ -80,10 +80,14 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
           + (fees * (1 - (p.bidAskRatio / 100)));
     }).reduce((ac, v) => ac + v);
 
-    const ethEntryValue = positions.map((p) => p.liquidityETH + (p.liquidityUSD / p.entryPrice))
-      .reduce((ac, v) => ac + v);
-    const usdEntryValue = positions.map((p) => (p.liquidityETH * p.entryPrice) + p.liquidityUSD)
-      .reduce((ac, v) => ac + v);
+    const holdETH = positions.map((p) => {
+      const valueIn = (p.liquidityETH * p.entryPrice) + p.liquidityUSD;
+      let valueOut = ((p.liquidityETH + (p.liquidityUSD / p.entryPrice)) * i);
+      if (p.exitPrice && moment(p.exitDate, 'YYYY-MM-DD HH:mm').isBefore(moment(dateNow, 'YYYY-MM-DD HH:mm'))) {
+        valueOut = ((p.liquidityETH + (p.liquidityUSD / p.entryPrice)) * p.exitPrice);
+      }
+      return valueOut - valueIn;
+    }).reduce((ac, v) => ac + v);
 
     const constantMixLiquidity = positions.map((p, o) => (constantMixList[o]
       .filter((e) => e.price === i)[0]
@@ -93,7 +97,7 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
     dataChart.push({
       price: i,
       [CHART_PROFIT_LOSS.UNI_V3]: uniV3Liquidity + uniV3Fee,
-      [CHART_PROFIT_LOSS.HOLD_ETH]: (i * ethEntryValue) - usdEntryValue,
+      [CHART_PROFIT_LOSS.HOLD_ETH]: holdETH,
       [CHART_PROFIT_LOSS.CONSTANT_MIX]: constantMixLiquidity,
     });
   }
