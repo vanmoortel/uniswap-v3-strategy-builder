@@ -91,9 +91,13 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
       return valueOut - valueIn;
     }).reduce((ac, v) => ac + v);
 
-    const constantMixLiquidity = positions.map((p, o) => (constantMixList[o]
-      .filter((e) => e.price === i)[0]
-          || { value: 0 }).value - ((p.liquidityETH * p.entryPrice) + p.liquidityUSD))
+    const constantMixLiquidity = positions.map((p, o) => {
+      const price = p.exitPrice && moment(p.exitDate, 'YYYY-MM-DD HH:mm').isBefore(moment(dateNow, 'YYYY-MM-DD HH:mm')) ? p.exitPrice : i;
+
+      return (constantMixList[o]
+        .filter((e) => e.price === price)[0]
+          || { value: 0 }).value - ((p.liquidityETH * p.entryPrice) + p.liquidityUSD);
+    })
       .reduce((ac, v) => ac + v);
 
     dataChart.push({
