@@ -66,17 +66,19 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
     // Get uniswap v3 fee collected based on date header
     const uniV3Fee = positions.map((p, iP) => {
       // use date header or exit date if exist and before date header
-      let dateToCompare;
+      let dateToCompare = moment(dateNow, 'YYYY-MM-DD HH:mm');
+      let priceETHFees = i;
       if (!p.exitDate) dateToCompare = moment(dateNow, 'YYYY-MM-DD HH:mm');
-      else {
-        dateToCompare = moment(p.exitDate, 'YYYY-MM-DD HH:mm').isBefore(moment(dateNow, 'YYYY-MM-DD HH:mm'))
-          ? moment(p.exitDate, 'YYYY-MM-DD HH:mm') : moment(dateNow, 'YYYY-MM-DD HH:mm');
+      else if (moment(p.exitDate, 'YYYY-MM-DD HH:mm').isBefore(moment(dateNow, 'YYYY-MM-DD HH:mm'))) {
+        priceETHFees = p.exitPrice;
+        dateToCompare = moment(p.exitDate, 'YYYY-MM-DD HH:mm');
       }
       if (moment(p.entryDate, 'YYYY-MM-DD HH:mm').isAfter(dateToCompare)) return 0;
 
       const fees = (p.volume * dateToCompare.diff(moment(p.entryDate, 'YYYY-MM-DD HH:mm'), 'days') * liquidityShareList[iP] * (p.feePercent / 100));
 
-      return (((fees * (p.bidAskRatio / 100)) / (p.exitPrice || ethPrice)) * i)
+      return (((fees * (p.bidAskRatio / 100))
+              / (Math.sqrt(p.rangeMin * p.rangeMax))) * (priceETHFees))
           + (fees * (1 - (p.bidAskRatio / 100)));
     }).reduce((ac, v) => ac + v);
 
