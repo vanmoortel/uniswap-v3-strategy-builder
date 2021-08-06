@@ -95,38 +95,36 @@ const AddPosition = React.memo(() => {
 
   const updateEntryPrice = (_entryPrice) => {
     setEntryPrice(_entryPrice || 0);
-    setLiquidityETH(0);
-    setLiquidityUSD(0);
+    if (_entryPrice < rangeMax) {
+      updateLiquidityETH((liquidityETH * 1) || (liquidityUSD / _entryPrice), _entryPrice);
+    } else updateLiquidityUSD((liquidityUSD * 1) || (liquidityETH * _entryPrice), _entryPrice);
   };
 
   const updateRange = (_rangeMin, _rangeMax) => {
     setRangeMin(_rangeMin || 0);
     setRangeMax(_rangeMax || 0);
-    setLiquidityETH(0);
-    setLiquidityUSD(0);
+    if (entryPrice < rangeMax) {
+      updateLiquidityETH((liquidityETH * 1) || (liquidityUSD / entryPrice), entryPrice);
+    } else updateLiquidityUSD((liquidityUSD * 1) || (liquidityETH * entryPrice), entryPrice);
   };
 
-  const updateLiquidityETH = (_liquidityETH) => {
+  const updateLiquidityETH = (_liquidityETH, _entryPrice) => {
     setLiquidityETH((_liquidityETH || 0).toFixed(6));
-    if (rangeMin && rangeMax && entryPrice) {
+    if (rangeMin && rangeMax && _entryPrice) {
       const liquidity = uniswapV3Liquidity({
-        usd: 100, ethPrice: entryPrice, rangeMin, rangeMax,
+        usd: 100, ethPrice: _entryPrice, rangeMin, rangeMax,
       });
-      if (liquidity) {
-        setLiquidityUSD((liquidity.usd * ((_liquidityETH || 0) / liquidity.eth)).toFixed(2));
-      }
+      setLiquidityUSD((liquidity.usd * ((_liquidityETH || 0) / liquidity.eth)).toFixed(2));
     }
   };
 
-  const updateLiquidityUSD = (_liquidityUSD) => {
+  const updateLiquidityUSD = (_liquidityUSD, _entryPrice) => {
     setLiquidityUSD((_liquidityUSD || 0).toFixed(2));
-    if (rangeMin && rangeMax && entryPrice) {
+    if (rangeMin && rangeMax && _entryPrice) {
       const liquidity = uniswapV3Liquidity({
-        usd: 100, ethPrice: entryPrice, rangeMin, rangeMax,
+        usd: 100, ethPrice: _entryPrice, rangeMin, rangeMax,
       });
-      if (liquidity) {
-        setLiquidityETH((liquidity.eth * ((_liquidityUSD || 0) / liquidity.usd)).toFixed(6));
-      }
+      setLiquidityETH((liquidity.eth * ((_liquidityUSD || 0) / liquidity.usd)).toFixed(6));
     }
   };
 
@@ -169,7 +167,7 @@ const AddPosition = React.memo(() => {
 
   const isValid = !isSubmitting && rangeMin >= 0 && rangeMin < rangeMax
       && entryPrice > 0 && entryDate && entryTime
-      && parseInt(liquidityETH, 10) + parseInt(liquidityUSD, 10) > 0
+      && (liquidityETH * 1) + (liquidityUSD * 1) > 0
       && volume >= 0 && liquidityOnePct >= 0 && bidAskRatio >= 0 && bidAskRatio <= 100
       && ((!positionToUpdate || status === STATUS.ACTIVE) || (
         exitPrice > 0 && exitDate && exitTime
@@ -187,17 +185,17 @@ const AddPosition = React.memo(() => {
         createdAt: positionToUpdate ? positionToUpdate.createdAt : Moment().unix(),
         pool: 'USDC-WETH',
         feePercent: 0.3,
-        rangeMin: parseInt(rangeMin, 10),
-        rangeMax: parseInt(rangeMax, 10),
-        entryPrice: parseInt(entryPrice, 10),
+        rangeMin: rangeMin * 1,
+        rangeMax: rangeMax * 1,
+        entryPrice: entryPrice * 1,
         entryDate: `${entryDate.format('YYYY-MM-DD')} ${entryTime.format('HH:mm')}`,
-        exitPrice: parseInt(exitPrice, 10),
+        exitPrice: exitPrice * 1,
         exitDate: exitDate && exitTime ? `${exitDate.format('YYYY-MM-DD')} ${exitTime.format('HH:mm')}` : '',
-        liquidityETH: parseInt(liquidityETH, 10),
-        liquidityUSD: parseInt(liquidityUSD, 10),
-        volume: parseInt(volume, 10),
-        liquidityOnePct: parseInt(liquidityOnePct, 10),
-        bidAskRatio: parseInt(bidAskRatio, 10),
+        liquidityETH: liquidityETH * 1,
+        liquidityUSD: liquidityUSD * 1,
+        volume: volume * 1,
+        liquidityOnePct: liquidityOnePct * 1,
+        bidAskRatio: bidAskRatio * 1,
         configuration,
         hide: false,
       },
@@ -275,14 +273,14 @@ const AddPosition = React.memo(() => {
               value={liquidityETH}
               formatter={(value) => `Ξ ${value}`}
               parser={(value) => value.replace('Ξ', '').replace(' ', '')}
-              onChange={(e) => updateLiquidityETH(e)}
+              onChange={(e) => updateLiquidityETH(e, entryPrice)}
             />
             <InputNumber
               min={0}
               value={liquidityUSD}
               formatter={(value) => `$ ${value}`}
               parser={(value) => value.replace('$', '').replace(' ', '')}
-              onChange={(e) => updateLiquidityUSD(e)}
+              onChange={(e) => updateLiquidityUSD(e, entryPrice)}
             />
           </Space>
         </Form.Item>

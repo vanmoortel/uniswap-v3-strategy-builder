@@ -52,7 +52,7 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
       if (p.exitPrice && moment(p.exitDate, 'YYYY-MM-DD HH:mm').isBefore(moment(dateNow, 'YYYY-MM-DD HH:mm'))) {
         // Position exited so only get diff between entry and exit price
         const v3Now = v3List[o]
-          .filter((e) => e.price === parseInt(p.exitPrice.toFixed(), 10))[0];
+          .filter((e) => e.price === (p.exitPrice.toFixed() * 1))[0];
         const liquidityETH = v3Now ? v3Now.eth : 0;
         const liquidityUSD = v3Now ? v3Now.usd : 0;
         return ((liquidityETH * p.exitPrice) + liquidityUSD)
