@@ -93,7 +93,7 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
         usd: entryValue / 2,
         entryPrice: p.entryPrice,
         price,
-      })).value - ((p.liquidityETH * p.entryPrice) + p.liquidityUSD);
+      })).value - entryValue;
     })
       .reduce((ac, v) => ac + v);
 
