@@ -22,6 +22,23 @@ export const constantMixPriceValue = ({ usd, ethPrice }) => {
   return chartData;
 };
 
+export const constantMixLiquidity = ({ usd, entryPrice, price }) => {
+  const USD = usd;
+  const ETH = USD / entryPrice;
+  const L = Math.sqrt(USD * ETH);
+
+  let x = L / Math.sqrt(price);
+  x = x || 0;
+  let y = L * Math.sqrt(price);
+  y = y || 0;
+  let value = (x * price) + y;
+  value = value || 0;
+
+  return {
+    value, price, eth: x, usd: y,
+  };
+};
+
 export const uniswapV3PriceValue = ({
   usd, ethPrice, rangeMin, rangeMax,
 }) => {

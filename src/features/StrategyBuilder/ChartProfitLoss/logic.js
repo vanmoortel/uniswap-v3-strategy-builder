@@ -1,16 +1,10 @@
 import moment from 'moment';
 import { CHART_PROFIT_LOSS } from '../../../utils/types';
-import { constantMixPriceValue, uniswapV3PriceValue } from '../../../utils/logic';
+import { constantMixLiquidity, uniswapV3PriceValue } from '../../../utils/logic';
 
 // eslint-disable-next-line import/prefer-default-export
 export const generateChartData = ({ positions, dateNow, ethPrice }) => {
   const dataChart = [];
-
-  // Generate constant mix for all position
-  const constantMixList = positions.map((p) => constantMixPriceValue({
-    usd: (p.liquidityETH * p.entryPrice) + p.liquidityUSD,
-    ethPrice: p.entryPrice,
-  }));
 
   // Generate concentrated range for all position
   const v3List = positions.map((p) => uniswapV3PriceValue({
@@ -91,12 +85,15 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
       return valueOut - valueIn;
     }).reduce((ac, v) => ac + v);
 
-    const constantMixLiquidity = positions.map((p, o) => {
+    const constantMix = positions.map((p) => {
       const price = p.exitPrice && moment(p.exitDate, 'YYYY-MM-DD HH:mm').isBefore(moment(dateNow, 'YYYY-MM-DD HH:mm')) ? p.exitPrice : i;
+      const entryValue = ((p.liquidityETH * p.entryPrice) + p.liquidityUSD);
 
-      return (constantMixList[o]
-        .filter((e) => e.price === price)[0]
-          || { value: 0 }).value - ((p.liquidityETH * p.entryPrice) + p.liquidityUSD);
+      return (constantMixLiquidity({
+        usd: entryValue / 2,
+        entryPrice: p.entryPrice,
+        price,
+      })).value - ((p.liquidityETH * p.entryPrice) + p.liquidityUSD);
     })
       .reduce((ac, v) => ac + v);
 
@@ -104,7 +101,7 @@ export const generateChartData = ({ positions, dateNow, ethPrice }) => {
       price: i,
       [CHART_PROFIT_LOSS.UNI_V3]: uniV3Liquidity + uniV3Fee,
       [CHART_PROFIT_LOSS.HOLD_ETH]: holdETH,
-      [CHART_PROFIT_LOSS.CONSTANT_MIX]: constantMixLiquidity,
+      [CHART_PROFIT_LOSS.CONSTANT_MIX]: constantMix,
     });
   }
 
