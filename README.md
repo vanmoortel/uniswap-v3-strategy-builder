@@ -3,11 +3,11 @@ Static website to analyse the profitability of your uniswap V3 strategy.(minimum
 
 ## **Installation**
 `yarn install`
-(+in production`yarn global add pm2`)
+(+in production`yarn global add serve`)
 ## **Development**
 `yarn run start:dev`
 ## **Production**
 ```
 yarn run build
-yarn run start:prod
+yarn run start
 ```
